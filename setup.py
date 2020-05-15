@@ -13,7 +13,7 @@ setup(
     setup_requires=['pytest-runner'],
     install_requires=[],
     tests_require=[
-        pytest,
+        'pytest',
         ],
     entry_points={
         'console_scripts': [
