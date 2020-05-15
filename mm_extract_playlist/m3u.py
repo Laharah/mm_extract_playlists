@@ -1,3 +1,6 @@
+import sys
+
+
 def write_all(playlists, dest_folder, overwrite=False, replace=None):
     """
     Write playlists to dest_folder.
@@ -12,7 +15,7 @@ def write_all(playlists, dest_folder, overwrite=False, replace=None):
         try:
             write(pl, path, overwrite=overwrite, replace=replace)
         except FileExistsError:
-            print(f"'{path}' already exists, skipping.")
+            print(f"'{path}' already exists, skipping.", file=sys.stderr)
 
 
 def write(playlist, path, *, overwrite=False, replace=None):

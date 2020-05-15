@@ -62,10 +62,11 @@ def test_all_overwrite(pl, tmp_path, capfd):
     prev = tmp_path / 'pl2.m3u'
     prev.write_text('pls no delete')
     m3u.write_all((pl, pl2), tmp_path)
-    assert capfd.readouterr().out == f"'{prev}' already exists, skipping.\n" 
+    assert capfd.readouterr().err == f"'{prev}' already exists, skipping.\n"
     assert prev.read_text() == 'pls no delete'
     m3u.write_all((pl, pl2), tmp_path, overwrite=True)
     assert prev.read_text() != 'pls no delete'
+
 
 def test_all_replace(pl, tmp_path):
     pl2 = Playlist(2, 'pl2', tracks=pl.tracks[:])
