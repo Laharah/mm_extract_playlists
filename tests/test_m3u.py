@@ -1,8 +1,11 @@
+import os
+from pathlib import Path, PureWindowsPath
+
 import pytest
+
 from mm_extract_playlist import m3u
 from mm_extract_playlist.playlist import Playlist
 from mm_extract_playlist.track import Track
-from pathlib import Path, PureWindowsPath
 
 
 @pytest.fixture
@@ -40,6 +43,9 @@ def test_replace_music_folder(tmp_path, pl):
                 "/pool/Media/Music/08 Mountains.mp3\n"
                 "/pool/Media/Music/09 Outlands.mp3\n"
                 "/pool/Media/Music/10 Crush.mp3\n")
+    if os.path.sep == '\\':
+        expected = expected.replace('/', '\\')
+
     path = tmp_path / 'test'
     m3u.write(pl, path, replace=replacement)
     assert path.read_text() == expected
@@ -76,6 +82,8 @@ def test_all_replace(pl, tmp_path):
                 "/pool/Media/Music/08 Mountains.mp3\n"
                 "/pool/Media/Music/09 Outlands.mp3\n"
                 "/pool/Media/Music/10 Crush.mp3\n")
+    if os.path.sep == '\\':
+        expected = expected.replace('/', '\\')
     m3u.write_all([pl, pl2], tmp_path, replace=replacement)
     for p in (pl, pl2):
         path = tmp_path / f'{p.name}.m3u'
