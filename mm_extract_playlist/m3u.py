@@ -1,6 +1,34 @@
-def write_all(playlists, dest_folder, overwrite=False):
-    "Write all playlists to dest_folder"
+def write_all(playlists, dest_folder, overwrite=False, replace=None):
+    """
+    Write playlists to dest_folder.
+        playlists: iterable of playlist objects to write
+        dest_folder: folder to write playlists to
+        overwrite: Overwrite conflicting playlists in dest_folder.
+        replace: replace music folder `tuple(old/music/folder, local/music/folder)`.
+    """
+    for pl in playlists:
+        # TODO: Allow for nested output playlists based on playlist parents
+        path = dest_folder / f'{pl.name}.m3u'
+        try:
+            write(pl, path, overwrite=overwrite, replace=replace)
+        except FileExistsError:
+            print(f"'{path}' already exists, skipping.")
 
 
-def write(playlist, path, overwrite=False):
-    "Write playlist to path"
+def write(playlist, path, *, overwrite=False, replace=None):
+    """
+    Write playlist to path.
+        playlist: Playlist object to write.
+        path: Local path to write playlist.
+        overwrite: Overwrite any exsisting file at path.
+        replace: replace music folder `tuple(old/music/folder, local/music/folder)`.
+    """
+    mode = 'w' if overwrite is True else 'x'
+    with open(path, mode) as fout:
+        for track in playlist.tracks:
+            path = track.path
+            if replace:
+                old, new = replace
+                rel = path.relative_to(old)
+                path = new / rel
+            print(path, file=fout)
