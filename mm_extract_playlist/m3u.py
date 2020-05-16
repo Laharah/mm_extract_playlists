@@ -11,6 +11,9 @@ def write_all(playlists, dest_folder, overwrite=False, replace=None):
     """
     for pl in playlists.values():
         # TODO: Allow for nested output playlists based on playlist parents
+        if not pl.tracks:
+            print(f'Skipping empty playlist "{pl.name}"', file=sys.stderr)
+            continue
         path = dest_folder / f'{pl.name}.m3u'
         try:
             write(pl, path, overwrite=overwrite, replace=replace)

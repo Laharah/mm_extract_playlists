@@ -7,5 +7,5 @@ def test_main(tmp_path):
     for p in listing:
         print(p)
         print(p.read_text())
-    assert len(listing) == 10 
+    assert len(listing) == 2
 
