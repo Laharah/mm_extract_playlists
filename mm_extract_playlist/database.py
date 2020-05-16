@@ -16,7 +16,7 @@ def get_all_playlists(db):
     tracks = get_all_playlist_tracks(db)
     for p in playlists:
         p.tracks = tracks[p.id]
-    return playlists
+    return {p.id: p for p in playlists}
 
 
 def get_all_playlist_tracks(db):

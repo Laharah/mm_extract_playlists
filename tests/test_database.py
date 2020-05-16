@@ -21,9 +21,9 @@ def test_connect():
 
 def test_get_all_playlists(db):
     playlists = database.get_all_playlists(db)
-    assert all(isinstance(p, Playlist) for p in playlists)
-    assert playlists[0].tracks == []
-    ksp = [p for p in playlists if p.name == 'KSP'][0]
+    assert all(isinstance(p, Playlist) for p in playlists.values())
+    assert playlists[1].tracks == []
+    ksp = [p for p in playlists.values() if p.name == 'KSP'][0]
     assert len(ksp.tracks) == 51
     # Must be in order
     assert [t.index for t in ksp.tracks] == list(range(51))
