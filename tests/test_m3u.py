@@ -53,7 +53,8 @@ def test_replace_music_folder(tmp_path, pl):
 
 def test_write_all(pl, tmp_path):
     pl2 = Playlist(2, 'pl2', tracks=pl.tracks[:])
-    m3u.write_all([pl, pl2], tmp_path)
+    pls = {p.id:p for p in (pl,pl2)}
+    m3u.write_all(pls, tmp_path)
     m1 = tmp_path / 'TEST PLAYLIST.m3u'
     m2 = tmp_path / 'pl2.m3u'
     assert m2.exists()
@@ -67,10 +68,11 @@ def test_all_overwrite(pl, tmp_path, capfd):
     pl2 = Playlist(2, 'pl2', tracks=pl.tracks[:])
     prev = tmp_path / 'pl2.m3u'
     prev.write_text('pls no delete')
-    m3u.write_all((pl, pl2), tmp_path)
+    pls = {p.id:p for p in (pl,pl2)}
+    m3u.write_all(pls, tmp_path)
     assert capfd.readouterr().err == f"'{prev}' already exists, skipping.\n"
     assert prev.read_text() == 'pls no delete'
-    m3u.write_all((pl, pl2), tmp_path, overwrite=True)
+    m3u.write_all(pls, tmp_path, overwrite=True)
     assert prev.read_text() != 'pls no delete'
 
 
@@ -84,7 +86,8 @@ def test_all_replace(pl, tmp_path):
                 "/pool/Media/Music/10 Crush.mp3\n")
     if os.path.sep == '\\':
         expected = expected.replace('/', '\\')
-    m3u.write_all([pl, pl2], tmp_path, replace=replacement)
+    pls = {p.id:p for p in (pl,pl2)}
+    m3u.write_all(pls, tmp_path, replace=replacement)
     for p in (pl, pl2):
         path = tmp_path / f'{p.name}.m3u'
         assert path.read_text() == expected

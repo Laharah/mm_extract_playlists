@@ -4,12 +4,12 @@ import sys
 def write_all(playlists, dest_folder, overwrite=False, replace=None):
     """
     Write playlists to dest_folder.
-        playlists: iterable of playlist objects to write
+        playlists: dictonary in the format {id:Playlist}
         dest_folder: folder to write playlists to
         overwrite: Overwrite conflicting playlists in dest_folder.
         replace: replace music folder `tuple(old/music/folder, local/music/folder)`.
     """
-    for pl in playlists:
+    for pl in playlists.values():
         # TODO: Allow for nested output playlists based on playlist parents
         path = dest_folder / f'{pl.name}.m3u'
         try:
