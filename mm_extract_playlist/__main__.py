@@ -1,3 +1,4 @@
+import argparse
 import itertools
 from pathlib import Path
 
@@ -23,7 +24,27 @@ def main(db, output_dir, music_folder=None, overwrite=False):
 
 
 def entry_point():
-    pass
+    parser = argparse.ArgumentParser('extractPlaylists')
+    parser.add_argument('db',
+                        metavar='database',
+                        help="MediaMonkey database to extract playlists from.")
+    parser.add_argument('output_dir',
+                        nargs='?',
+                        metavar='output_dir',
+                        default=Path(),
+                        type=Path,
+                        help="Location to save playlists.")
+    parser.add_argument('-f', '--overwrite',
+                        help="Overwrite existing files.",
+                        dest='overwrite',
+                        action='store_true')
+    parser.add_argument('--music-folder',
+                        help='Re-route tracks to local music folder.',
+                        dest='music_folder',
+                        type=Path)
+    options = parser.parse_args()
+    options = vars(options)
+    main(**options)
 
 
 if __name__ == '__main__':
