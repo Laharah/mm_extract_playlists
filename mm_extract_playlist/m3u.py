@@ -29,7 +29,7 @@ def write(playlist, path, *, overwrite=False, replace=None):
         overwrite: Overwrite any exsisting file at path.
         replace: replace music folder `tuple(old/music/folder, local/music/folder)`.
     """
-    mode = 'w' if overwrite is True else 'x'
+    mode = 'wb' if overwrite is True else 'xb'
     with open(path, mode) as fout:
         for track in playlist.tracks:
             path = track.path
@@ -37,4 +37,5 @@ def write(playlist, path, *, overwrite=False, replace=None):
                 old, new = replace
                 rel = path.relative_to(old)
                 path = new / rel
-            print(path, file=fout)
+            fout.write(bytes(str(path), 'utf8'))
+            fout.write(b'\n')
