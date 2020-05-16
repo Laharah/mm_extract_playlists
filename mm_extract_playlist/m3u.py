@@ -1,4 +1,5 @@
 import sys
+from .utils import sanitize
 
 
 def write_all(playlists, dest_folder, overwrite=False, replace=None):
@@ -17,7 +18,7 @@ def write_all(playlists, dest_folder, overwrite=False, replace=None):
         if not pl.tracks:
             print(f'Skipping empty playlist "{pl.name}"', file=sys.stderr)
             continue
-        path = dest_folder / f'{pl.name}.m3u'
+        path = dest_folder / f'{sanitize(pl.name)}.m3u'
         try:
             write(pl, path, overwrite=overwrite, replace=replace)
         except FileExistsError:

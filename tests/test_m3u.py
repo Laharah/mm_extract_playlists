@@ -99,3 +99,9 @@ def test_all_skip_empty(pl, tmp_path, capfd):
     out = capfd.readouterr().err
     assert out == f'Skipping empty playlist "{pl.name}"\n'
     assert len(list(tmp_path.iterdir())) == 0
+
+def test_sanaitize_filename(pl, tmp_path):
+    pl.name = "Bad: File\\Name?"
+    m3u.write_all({pl.id:pl}, tmp_path)
+    fname = list(tmp_path.iterdir())[0]
+    assert fname.name == 'Bad_ File_Name_.m3u'
