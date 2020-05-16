@@ -11,6 +11,9 @@ def write_all(playlists, dest_folder, overwrite=False, replace=None):
     """
     for pl in playlists.values():
         # TODO: Allow for nested output playlists based on playlist parents
+        if pl.auto:
+            print(f'Skipping AutoPlaylist "{pl.name}".', file=sys.stderr)
+            continue
         if not pl.tracks:
             print(f'Skipping empty playlist "{pl.name}"', file=sys.stderr)
             continue
