@@ -3,6 +3,13 @@ Extract playlists from MediaMonkey database.
 
 **NOTE: Does not currently support auto-playlists.**
 
+## Installation
+Pure python, can be installed with pip:
+
+`pip install git+https://github.com/Laharah/mm_extract_playlists.git`
+
+---
+
 ```
 usage: extractPlaylists database [outputdir] [options]
 
