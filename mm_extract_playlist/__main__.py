@@ -1,5 +1,4 @@
 __doc__ = "Extract playlists from MediaMonkey and save them as m3u files."
-import argparse
 import itertools
 from pathlib import Path
 
@@ -36,6 +35,8 @@ def main(db,
 
 
 def entry_point():
+    import argparse
+    import os
     example = (r'Example usage: '
                r'extractPlaylists -d %APPDATA%\MediaMonkey\MM.DB %USERPROFILE%\Music')
     parser = argparse.ArgumentParser(
@@ -50,7 +51,6 @@ def entry_point():
                         nargs='?',
                         metavar='output_dir',
                         default=Path(),
-                        type=Path,
                         help="Location to save playlists.")
     parser.add_argument('-f',
                         '--overwrite',
@@ -59,8 +59,7 @@ def entry_point():
                         action='store_true')
     parser.add_argument('--music-folder',
                         help='Re-route tracks to local music folder.',
-                        dest='music_folder',
-                        type=Path)
+                        dest='music_folder')
     parser.add_argument('-p',
                         '--prepend-parent',
                         help="Place parent playlists name at front of child playlists.",
@@ -73,6 +72,8 @@ def entry_point():
                         dest='folders',
                         action='store_true')
     options = parser.parse_args()
+    options.database = Path(os.path.expandvars(options.database))
+    options.output_dir = Path(os.path.expandvars(options.output_dir))
     options = vars(options)
     main(**options)
 
