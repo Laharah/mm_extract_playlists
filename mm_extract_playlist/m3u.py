@@ -1,8 +1,14 @@
 import sys
+from pathlib import Path
 from .utils import sanitize
 
 
-def write_all(playlists, dest_folder, overwrite=False, replace=None):
+def write_all(playlists,
+              dest_folder,
+              overwrite=False,
+              replace=None,
+              prepend_parent=False,
+              folders=False):
     """
     Write playlists to dest_folder.
         playlists: dictonary in the format {id:Playlist}
@@ -11,14 +17,27 @@ def write_all(playlists, dest_folder, overwrite=False, replace=None):
         replace: replace music folder `tuple(old/music/folder, local/music/folder)`.
     """
     for pl in playlists.values():
-        # TODO: Allow for nested output playlists based on playlist parents
         if pl.auto:
             print(f'Skipping AutoPlaylist "{pl.name}".', file=sys.stderr)
             continue
         if not pl.tracks:
             print(f'Skipping empty playlist "{pl.name}"', file=sys.stderr)
             continue
-        path = dest_folder / f'{sanitize(pl.name)}.m3u'
+        file = Path(f'{sanitize(pl.name)}.m3u')
+        if (prepend_parent or folders) and pl.parent is not None:
+            parents = [file.name]
+            p = pl
+            while (p := p.parent):
+                p = playlists[p]
+                parents.append(sanitize(p.name))
+            if folders:
+                file = file.parent.joinpath(*reversed(parents[1:])) / file.name
+            if prepend_parent:
+                file = file.parent / ' - '.join(reversed(parents))
+
+        path = dest_folder / file
+        if folders:
+            path.parent.mkdir(parents=True, exist_ok=True)
         try:
             write(pl, path, overwrite=overwrite, replace=replace)
         except FileExistsError:

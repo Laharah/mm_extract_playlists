@@ -100,8 +100,26 @@ def test_all_skip_empty(pl, tmp_path, capfd):
     assert out == f'Skipping empty playlist "{pl.name}"\n'
     assert len(list(tmp_path.iterdir())) == 0
 
+
 def test_sanaitize_filename(pl, tmp_path):
     pl.name = "Bad: File\\Name?"
-    m3u.write_all({pl.id:pl}, tmp_path)
+    m3u.write_all({pl.id: pl}, tmp_path)
     fname = list(tmp_path.iterdir())[0]
     assert fname.name == 'Bad_ File_Name_.m3u'
+
+
+def test_pre_pend_parent(pl, tmp_path):
+    parent = Playlist(4, 'ParentPL')
+    pl.parent = 4
+    m3u.write_all({pl.id: pl, parent.id: parent}, tmp_path, prepend_parent=True)
+    assert list(tmp_path.iterdir())[0].name == 'ParentPL - TEST PLAYLIST.m3u'
+
+
+def test_folder_parent(pl, tmp_path):
+    parent = Playlist(4, 'ParentPL')
+    pl.parent = 4
+    m3u.write_all({pl.id: pl, parent.id: parent}, tmp_path, folders=True)
+    p = tmp_path / parent.name
+    assert p.exists()
+    assert p.is_dir()
+    assert list(p.iterdir())[0].name == 'TEST PLAYLIST.m3u'

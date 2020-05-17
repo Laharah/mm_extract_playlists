@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='mm_extract_playlists',
-    version='0.0.0',
+    version='0.1.0',
     url='',
     license='MIT',
     author='laharah',
