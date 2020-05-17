@@ -3,6 +3,9 @@ Extract playlists from MediaMonkey database.
 
 **NOTE: Does not currently support auto-playlists.**
 
+## Requirements
+* Python 3.8+
+
 ## Installation
 Pure python, can be installed with pip:
 
@@ -28,4 +31,6 @@ optional arguments:
                         playlists.
   -d, --folders         Place sub-playlists in their own folders, named after
                         parent playlist.
+
+Example usage: extractPlaylists -d %APPDATA%\MediaMonkey\MM.DB %USERPROFILE%\Music
 ```

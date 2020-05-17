@@ -36,10 +36,13 @@ def main(db,
 
 
 def entry_point():
+    example = ('Example usage: '
+               'extractPlaylists -d %APPDATA%\MediaMonkey\MM.DB %USERPROFILE%\Music')
     parser = argparse.ArgumentParser(
         'extractPlaylists',
         usage='extractPlaylists database [outputdir] [options]',
-        description=__doc__)
+        description=__doc__,
+        epilog=example)
     parser.add_argument('db',
                         metavar='database',
                         help="MediaMonkey database to extract playlists from.")
