@@ -1,5 +1,5 @@
 # extractPlaylists
-Extract playlists from MediaMonkey database.
+Extract playlists from MediaMonkey database from the command line.
 
 **NOTE: Does not currently support auto-playlists.**
 
