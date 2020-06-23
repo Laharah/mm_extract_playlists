@@ -15,6 +15,7 @@ def test_create_track():
         ':\\Users\\testuser\\Desktop\\songs\\01 Space Oddity.mp3')
     assert t.playlist_id == 14
     assert t.index == 2
+    assert repr(t) == 'Track("Space Oddity", self.index=2)'
 
 
 def test_create_track_from_row():
